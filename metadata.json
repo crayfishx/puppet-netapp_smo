@@ -1,0 +1,17 @@
+{
+  "name": "crayfishx-netapp_smo",
+  "version": "1.0.0",
+  "author": "Craig Dunn",
+  "summary": "Manage SnapDrive for Oracle",
+  "license": "Apache 2.0",
+  "source": "https://github.com/crayfishx/puppet-netapp_smo",
+  "project_page": "https://github.com/crayfishx/puppet-netapp_smo",
+  "issues_url": "https://github.com/crayfishx/puppet-netapp_smo/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs-stdlib",
+      "version_range": ">= 1.0.0"
+    }
+  ]
+}
+
