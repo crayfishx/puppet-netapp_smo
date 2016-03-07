@@ -61,7 +61,7 @@ class netapp_smo (
     if $version {
       $filename = "netapp.smo.${system_type}-${system_arch}-${version}.bin"
     } else {
-      fail("If version is not provided, a filename must be given.")
+      fail('If version is not provided, a filename must be given.')
     }
   }
 
@@ -80,20 +80,20 @@ class netapp_smo (
 
 
   
-  exec { "smo::install":
-    path    => "/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin",
+  exec { 'smo::install':
+    path    => '/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin',
     command => "${installer_path}/${filename} -i silent",
-    creates => "/opt/NetApp/smo",
+    creates => '/opt/NetApp/smo',
   }
 
-  service { "netapp.smo":
+  service { 'netapp.smo':
     ensure     => running,
     start      => '/opt/NetApp/smo/bin/smo_server start',
     stop       => '/opt/NetApp/smo/bin/smo_server stop',
     status     => '/opt/NetApp/smo/bin/smo_server status',
     hasrestart => false,
     provider   => 'base',
-    require    => Exec["smo::install"],
+    require    => Exec['smo::install'],
   }
   
 }
