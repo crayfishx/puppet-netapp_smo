@@ -44,7 +44,7 @@
 #
 # Copyright 2016 Craig Dunn
 #
-class smo (
+class netapp_smo (
   $source_path        = undef,
   $version            = undef,
   $manage_installer   = true,
