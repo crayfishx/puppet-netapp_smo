@@ -4,6 +4,7 @@
   "author": "Craig Dunn",
   "summary": "Manage SnapDrive for Oracle",
   "license": "Apache 2.0",
+  "tags": [ "oracle_smo", "smo", "netapp", "snapdrive", "oracle" ],
   "source": "https://github.com/crayfishx/puppet-netapp_smo",
   "project_page": "https://github.com/crayfishx/puppet-netapp_smo",
   "issues_url": "https://github.com/crayfishx/puppet-netapp_smo/issues",
