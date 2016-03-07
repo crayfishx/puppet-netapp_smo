@@ -54,6 +54,11 @@ class netapp_smo (
   $installer_filename = undef,
 ) {
 
+  $smo_root = $::osfamily ? {
+    'Solaris' => '/opt/NTAPsmo',
+    default   => '/opt/NetApp'
+  }
+
 
   if $installer_filename {
     $filename = $installer_filename
@@ -83,14 +88,14 @@ class netapp_smo (
   exec { 'smo::install':
     path    => '/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin',
     command => "${installer_path}/${filename} -i silent",
-    creates => '/opt/NetApp/smo',
+    creates => "${smo_root}/smo",
   }
 
   service { 'netapp.smo':
     ensure     => running,
-    start      => '/opt/NetApp/smo/bin/smo_server start',
-    stop       => '/opt/NetApp/smo/bin/smo_server stop',
-    status     => '/opt/NetApp/smo/bin/smo_server status',
+    start      => "${smo_root}/smo/bin/smo_server start",
+    stop       => "${smo_root}/smo/bin/smo_server stop",
+    status     => "${smo_root}/smo/bin/smo_server status",
     hasrestart => false,
     provider   => 'base',
     require    => Exec['smo::install'],
