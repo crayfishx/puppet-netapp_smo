@@ -52,6 +52,7 @@ class netapp_smo (
   $system_type        = 'linux',
   $system_arch        = 'x64',
   $installer_filename = undef,
+  $properties         = {}, 
 ) {
 
   $smo_root = $::osfamily ? {
@@ -82,6 +83,8 @@ class netapp_smo (
       before => Exec['smo::install'],
     }
   }
+
+  create_resources('netapp_smo::property', $properties)
 
 
   
