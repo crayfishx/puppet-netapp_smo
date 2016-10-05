@@ -45,20 +45,18 @@
 # Copyright 2016 Craig Dunn
 #
 class netapp_smo (
-  $source_path        = undef,
-  $version            = undef,
-  $manage_installer   = true,
-  $installer_path     = '/opt/.smo_snapdrive',
-  $system_type        = 'linux',
-  $system_arch        = 'x64',
-  $installer_filename = undef,
-  $properties         = {}, 
-) {
-
-  $smo_root = $::osfamily ? {
-    'Solaris' => '/opt/NTAPsmo',
-    default   => '/opt/NetApp'
-  }
+  $source_uri            = undef,
+  $version               = undef,
+  $manage_installer      = $::netapp_smo::params::manage_installer,
+  $installer_path        = $::netapp_smo::params::installer_path,
+  $system_type           = $::netapp_smo::params::system_type,
+  $system_arch           = $::netapp_smo::params::system_arch,
+  $smo_root              = $::netapp_smo::params::smo_root,
+  $manage_systemd        = $::netapp_smo::params::manage_systemd,
+  $manage_installer_path = $::netapp_smo::params::manage_installer_path,
+  $installer_filename    = undef,
+  $properties            = {},
+) inherits netapp_smo::params {
 
 
   if $installer_filename {
@@ -72,29 +70,44 @@ class netapp_smo (
   }
 
   if $manage_installer {
-    file { $installer_path:
-      ensure => directory,
+    if ( !$source_uri ) {
+      fail('If manage_installer is true then a source_uri must be provided')
+    }
+
+    if $manage_installer_path {
+      file { $installer_path:
+        ensure => directory,
+      }
     }
   
+    archive { "${installer_path}/${filename}":
+      ensure          => present,
+      extract         => false,
+      cleanup         => false,
+      source          => "${source_uri}/${filename}",
+      creates         => "${smo_root}/smo",
+      before          => Exec['smo::install'],
+    }
+
+    ## Clean up the installer file once the install has completed.
     file { "${installer_path}/${filename}":
-      ensure => file,
-      mode   => '0755',
-      source => "${source_path}/${filename}",
-      before => Exec['smo::install'],
+      ensure  => absent,
+      backup  => false,
+      require => Exec['smo::install'],
     }
   }
 
   
   exec { 'smo::install':
     path    => '/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin',
-    command => "${installer_path}/${filename} -i silent",
+    command => "chmod 775 ${installer_path}/${filename}; ${installer_path}/${filename} -i silent",
     creates => "${smo_root}/smo",
   }
 
   create_resources('netapp_smo::property', $properties)
   Exec['smo::install'] -> Netapp_smo::Property <||>
 
-  if ( $::osfamily == 'Redhat' and $::operatingsystemmajrelease == '7' ) {
+  if $manage_systemd {
     systemd::unit_file { 'netapp-smo.service':
       content => template('netapp_smo/netapp-smo.service.erb'),
       before  => Service['netapp-smo']
@@ -102,9 +115,15 @@ class netapp_smo (
   }
 
 
-  service { 'netapp-smo':
-    ensure     => running,
-    require    => Exec['smo::install'],
-  } 
+  if $manage_service {
+    service { $service_name:
+      ensure     => running,
+      start      => $service_start,
+      stop       => $service_stop,
+      hasrestart => $service_hasrestart,
+      require    => Exec['smo::install'],
+    }
+    Netapp_smo::Property<||> -> Service[$service_name]
+  }
   
 }
