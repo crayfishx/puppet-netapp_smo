@@ -1,0 +1,14 @@
+# Managed by Puppet
+#
+[Unit]
+Description=Snapdrive Manager for Oracle
+
+
+[Service]
+ExecStart=<%= @smo_root %>/smo/bin/smo_server start
+ExecStop=<%= @smo_root %>/smo/bin/smo_server stop
+Type=forking
+
+[Install]
+WantedBy=multi-user.target
+

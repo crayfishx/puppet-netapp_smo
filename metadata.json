@@ -1,6 +1,6 @@
 {
   "name": "crayfishx-netapp_smo",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "author": "Craig Dunn",
   "summary": "Manage SnapDrive for Oracle",
   "license": "Apache-2.0",
@@ -17,15 +17,15 @@
     {
     "operatingsystem":"Solaris",
     "operatingsystemrelease":[ "10", "11" ]
-    },
-    {
-    "operatingsystem":"AIX"
     }
    ],
   "source": "https://github.com/crayfishx/puppet-netapp_smo",
   "project_page": "https://github.com/crayfishx/puppet-netapp_smo",
   "issues_url": "https://github.com/crayfishx/puppet-netapp_smo/issues",
   "dependencies": [
+    {"name":"puppetlabs-inifile","version_requirement":">= 1.0.0 < 2.0.0"},
+    {"name":"camptocamp-systemd","version_requirement":">= 0.3.0 < 1.0.0"},
+    {"name":"puppet-archive","version_requirement":">= 0.5.0 < 2.0.0"},
   ]
 }
 
