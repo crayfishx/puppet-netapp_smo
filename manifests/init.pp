@@ -54,6 +54,10 @@ class netapp_smo (
   $smo_root              = $::netapp_smo::params::smo_root,
   $manage_systemd        = $::netapp_smo::params::manage_systemd,
   $manage_installer_path = $::netapp_smo::params::manage_installer_path,
+  $service_status        = $::netapp_smo::params::service_status,
+  $service_start         = $::netapp_smo::params::service_start,
+  $service_stop          = $::netapp_smo::params::service_stop,
+  $service_hasrestart    = $::netapp_smo::params::service_hasrestart,
   $installer_filename    = undef,
   $properties            = {},
 ) inherits netapp_smo::params {
@@ -120,6 +124,7 @@ class netapp_smo (
       ensure     => running,
       start      => $service_start,
       stop       => $service_stop,
+      status     => $service_status,
       hasrestart => $service_hasrestart,
       require    => Exec['smo::install'],
     }

@@ -9,6 +9,7 @@ class netapp_smo::params {
   $service_name          = 'netapp-smo'
   $service_stop          = undef
   $service_start         = undef
+  $service_status        = undef
   $service_hasrestart    = undef
 
   $smo_root = $::osfamily ? {
