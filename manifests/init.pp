@@ -84,9 +84,6 @@ class netapp_smo (
     }
   }
 
-  create_resources('netapp_smo::property', $properties)
-
-
   
   exec { 'smo::install':
     path    => '/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin',
@@ -94,14 +91,20 @@ class netapp_smo (
     creates => "${smo_root}/smo",
   }
 
-  service { 'netapp.smo':
-    ensure     => running,
-    start      => "${smo_root}/smo/bin/smo_server start",
-    stop       => "${smo_root}/smo/bin/smo_server stop",
-    status     => "${smo_root}/smo/bin/smo_server status",
-    hasrestart => false,
-    provider   => 'base',
-    require    => Exec['smo::install'],
+  create_resources('netapp_smo::property', $properties)
+  Exec['smo::install'] -> Netapp_smo::Property <||>
+
+  if ( $::osfamily == 'Redhat' and $::operatingsystemmajrelease == '7' ) {
+    systemd::unit_file { 'netapp-smo.service':
+      content => template('netapp_smo/netapp-smo.service.erb'),
+      before  => Service['netapp-smo']
+    }
   }
+
+
+  service { 'netapp-smo':
+    ensure     => running,
+    require    => Exec['smo::install'],
+  } 
   
 }

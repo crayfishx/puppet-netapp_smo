@@ -1,0 +1,13 @@
+# Managed by Puppet
+#
+[Unit]
+Description=Snapchat for Oracle
+
+
+[Service]
+ExecStart=<%= @smo_root %>/smo/bin/smo_server start
+ExecStop=<%= @smo_root %>/smo/bin/smo_server stop
+
+[Install]
+WantedBy=multi-user.target
+
