@@ -1,3 +1,9 @@
+### 2.0.1
+
+Minor forge release, corrects the use of "SnapDrive for Oracle" to "SnapManager for Oracle"
+
+* systemd template service description changed to reflect "SnapManager for Oracle"
+
 
 
 # 2.0.0
