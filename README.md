@@ -25,7 +25,7 @@ The SMO package comes as a binary self-contained executable installer that suppo
 ### Parameters
 
 `source_uri`:
-Path to find the folder containing the installation binary (eg: puppet:///modules/smo).  The source URI should be the containing folder for `installer_filename`
+Path to find the folder containing the installation binary (eg: http://content.localdomain/netapp_smo).  The source URI should be the containing folder for `installer_filename`
 
 `version`: (optional)
 Version of SMO to install
