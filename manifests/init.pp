@@ -102,6 +102,9 @@ class netapp_smo (
   }
 
   
+  # We chmod the file first because we already have a file resource
+  # managing the installer to clean up after.
+  #
   exec { 'smo::install':
     path    => '/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin',
     command => "chmod 775 ${installer_path}/${filename}; ${installer_path}/${filename} -i silent",
