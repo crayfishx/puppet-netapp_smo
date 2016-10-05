@@ -132,7 +132,7 @@ class netapp_smo (
       hasrestart => $service_hasrestart,
       require    => Exec['smo::install'],
     }
-    Netapp_smo::Property<||> -> Service[$service_name]
+    Netapp_smo::Property<||> ~> Service[$service_name]
   }
   
 }
