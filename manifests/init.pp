@@ -59,6 +59,7 @@ class netapp_smo (
   $service_start         = $::netapp_smo::params::service_start,
   $service_stop          = $::netapp_smo::params::service_stop,
   $service_hasrestart    = $::netapp_smo::params::service_hasrestart,
+  $track_versions        = $::netapp_smo::params::track_versions,
   $installer_filename    = undef,
   $properties            = {},
 ) inherits netapp_smo::params {
@@ -84,13 +85,35 @@ class netapp_smo (
         ensure => directory,
       }
     }
+
+    if $track_versions {
+      if (!$version) {
+        fail("Must specify a version number in order to use track_versions feature")
+      }
+
+      file { "${smo_root}/.puppet":
+        ensure  => directory,
+        require => Exec['smo::install'],
+      }
+
+      file { "${smo_root}/.puppet/version-${version}":
+        ensure  => file,
+        content => "This file is needed by Puppet, no not remove",
+        require => Exec['smo::install'],
+      }
+      $archive_creates = "${smo_root}/.puppet/version-${version}"
+
+    } else {
+      $archive_creates = "${smo_root}/smo"
+    }
+
   
     archive { "${installer_path}/${filename}":
       ensure          => present,
       extract         => false,
       cleanup         => false,
       source          => "${source_uri}/${filename}",
-      creates         => "${smo_root}/smo",
+      creates         => $archive_creates,
       before          => Exec['smo::install'],
     }
 
