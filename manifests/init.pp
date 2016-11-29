@@ -59,7 +59,7 @@ class netapp_smo (
   $service_start         = $::netapp_smo::params::service_start,
   $service_stop          = $::netapp_smo::params::service_stop,
   $service_hasrestart    = $::netapp_smo::params::service_hasrestart,
-  $track_versions        = $::netapp_smo::params::track_versions,
+  $upgradable            = $::netapp_smo::params::upgradable,
   $installer_filename    = undef,
   $properties            = {},
 ) inherits netapp_smo::params {
@@ -86,9 +86,9 @@ class netapp_smo (
       }
     }
 
-    if $track_versions {
+    if $upgradable {
       if (!$version) {
-        fail("Must specify a version number in order to use track_versions feature")
+        fail("Must specify a version number in order to use upgradable feature")
       }
 
       file { "${smo_root}/.puppet":
@@ -137,6 +137,8 @@ class netapp_smo (
       backup  => false,
       require => Exec['smo::install'],
     }
+  } else {
+    $check_installed = "${smo_root}/smo"
   }
 
   
