@@ -101,10 +101,10 @@ class netapp_smo (
         content => "This file is needed by Puppet, no not remove",
         require => Exec['smo::install'],
       }
-      $archive_creates = "${smo_root}/.puppet/version-${version}"
+      $check_installed = "${smo_root}/.puppet/version-${version}"
 
     } else {
-      $archive_creates = "${smo_root}/smo"
+      $check_installed = "${smo_root}/smo"
     }
 
   
@@ -113,7 +113,7 @@ class netapp_smo (
       extract         => false,
       cleanup         => false,
       source          => "${source_uri}/${filename}",
-      creates         => $archive_creates,
+      creates         => $check_installed,
       before          => Exec['smo::install'],
     }
 
@@ -132,7 +132,7 @@ class netapp_smo (
   exec { 'smo::install':
     path    => '/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin',
     command => "chmod 775 ${installer_path}/${filename}; ${installer_path}/${filename} -i silent",
-    creates => "${smo_root}/smo",
+    creates => $check_installed,
   }
 
   create_resources('netapp_smo::property', $properties)
