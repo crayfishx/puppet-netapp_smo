@@ -1,3 +1,10 @@
+## 2.1.0
+
+Feature release.
+
+* Added the `upgradable` attribute to enable the module to track installed versions and attempt to upgrade an SMO installation.  By default this behaviour is disabled and can be enabled by setting `upgradable` to `true`.  See the README for more information on this option.
+
+
 ### 2.0.1
 
 Minor forge release, corrects the use of "SnapDrive for Oracle" to "SnapManager for Oracle"
