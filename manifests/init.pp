@@ -103,6 +103,20 @@ class netapp_smo (
       }
       $check_installed = "${smo_root}/.puppet/version-${version}"
 
+      # If we are managing upgradable versions and the target version does
+      # not exist then we should stop the service, we must do this with an
+      # exec
+      $stop_cmd = $::manage_systemd ? {
+        true    => "systemctl stop ${service_name}",
+        default => "service ${service_name} stop"
+      }
+      exec { 'netapp_smo::service_stop':
+        path    => '/sbin:/bin:/usr/sbin:/usr/bin',
+        command => $stop_cmd,
+        creates => "${smo_root}/.puppet/version-${version}",
+        before  => Exec['smo::install'],
+      }
+
     } else {
       $check_installed = "${smo_root}/smo"
     }
