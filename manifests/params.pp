@@ -1,3 +1,5 @@
+# Default parameters for the netapp_smo module
+#
 class netapp_smo::params {
 
   $manage_installer      = true

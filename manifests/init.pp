@@ -26,7 +26,7 @@
 #   The system arch we are installing, default: x64
 #
 # [*installer_filename*]
-#   If version, arch and system_type are set then the installer filename 
+#   If version, arch and system_type are set then the installer filename
 #   will be determined automatically, but can be overridden here.
 #
 # === Examples
@@ -59,6 +59,7 @@ class netapp_smo (
   $service_start         = $::netapp_smo::params::service_start,
   $service_stop          = $::netapp_smo::params::service_stop,
   $service_hasrestart    = $::netapp_smo::params::service_hasrestart,
+  $service_name          = $::netapp_smo::params::service_name,
   $upgradable            = $::netapp_smo::params::upgradable,
   $installer_filename    = undef,
   $properties            = {},
@@ -88,7 +89,7 @@ class netapp_smo (
 
     if $upgradable {
       if (!$version) {
-        fail("Must specify a version number in order to use upgradable feature")
+        fail('Must specify a version number in order to use upgradable feature')
       }
 
       file { "${smo_root}/smo/.puppet":
@@ -98,7 +99,7 @@ class netapp_smo (
 
       file { "${smo_root}/smo/.puppet/version-${version}":
         ensure  => file,
-        content => "This file is needed by Puppet, no not remove",
+        content => 'This file is needed by Puppet, no not remove',
         require => Exec['smo::install'],
       }
       $check_installed = "${smo_root}/smo/.puppet/version-${version}"
@@ -121,14 +122,14 @@ class netapp_smo (
       $check_installed = "${smo_root}/smo"
     }
 
-  
+
     archive { "${installer_path}/${filename}":
-      ensure          => present,
-      extract         => false,
-      cleanup         => false,
-      source          => "${source_uri}/${filename}",
-      creates         => $check_installed,
-      before          => Exec['smo::install'],
+      ensure  => present,
+      extract => false,
+      cleanup => false,
+      source  => "${source_uri}/${filename}",
+      creates => $check_installed,
+      before  => Exec['smo::install'],
     }
 
     ## Clean up the installer file once the install has completed.
@@ -141,7 +142,7 @@ class netapp_smo (
     $check_installed = "${smo_root}/smo"
   }
 
-  
+
   # We chmod the file first because we already have a file resource
   # managing the installer to clean up after.
   #
@@ -173,5 +174,5 @@ class netapp_smo (
     }
     Netapp_smo::Property<||> ~> Service[$service_name]
   }
-  
+
 }
