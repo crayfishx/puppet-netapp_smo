@@ -59,6 +59,7 @@ class netapp_smo (
   $service_start         = $::netapp_smo::params::service_start,
   $service_stop          = $::netapp_smo::params::service_stop,
   $service_hasrestart    = $::netapp_smo::params::service_hasrestart,
+  $upgradable            = $::netapp_smo::params::upgradable,
   $installer_filename    = undef,
   $properties            = {},
 ) inherits netapp_smo::params {
@@ -84,13 +85,49 @@ class netapp_smo (
         ensure => directory,
       }
     }
+
+    if $upgradable {
+      if (!$version) {
+        fail("Must specify a version number in order to use upgradable feature")
+      }
+
+      file { "${smo_root}/smo/.puppet":
+        ensure  => directory,
+        require => Exec['smo::install'],
+      }
+
+      file { "${smo_root}/smo/.puppet/version-${version}":
+        ensure  => file,
+        content => "This file is needed by Puppet, no not remove",
+        require => Exec['smo::install'],
+      }
+      $check_installed = "${smo_root}/smo/.puppet/version-${version}"
+
+      # If we are managing upgradable versions and the target version does
+      # not exist then we should stop the service, we must do this with an
+      # exec
+      $stop_cmd = $manage_systemd ? {
+        true    => "systemctl stop ${service_name}",
+        default => "service ${service_name} stop"
+      }
+      exec { 'netapp_smo::service_stop':
+        path    => '/sbin:/bin:/usr/sbin:/usr/bin',
+        command => $stop_cmd,
+        creates => "${smo_root}/.puppet/version-${version}",
+        before  => Exec['smo::install'],
+      }
+
+    } else {
+      $check_installed = "${smo_root}/smo"
+    }
+
   
     archive { "${installer_path}/${filename}":
       ensure          => present,
       extract         => false,
       cleanup         => false,
       source          => "${source_uri}/${filename}",
-      creates         => "${smo_root}/smo",
+      creates         => $check_installed,
       before          => Exec['smo::install'],
     }
 
@@ -100,6 +137,8 @@ class netapp_smo (
       backup  => false,
       require => Exec['smo::install'],
     }
+  } else {
+    $check_installed = "${smo_root}/smo"
   }
 
   
@@ -109,7 +148,7 @@ class netapp_smo (
   exec { 'smo::install':
     path    => '/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin',
     command => "chmod 775 ${installer_path}/${filename}; ${installer_path}/${filename} -i silent",
-    creates => "${smo_root}/smo",
+    creates => $check_installed,
   }
 
   create_resources('netapp_smo::property', $properties)

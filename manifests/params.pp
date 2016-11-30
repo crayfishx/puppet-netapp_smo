@@ -11,6 +11,7 @@ class netapp_smo::params {
   $service_start         = undef
   $service_status        = undef
   $service_hasrestart    = undef
+  $upgradable            = false
 
   $smo_root = $::osfamily ? {
     'Solaris' => '/opt/NTAPsmo',
