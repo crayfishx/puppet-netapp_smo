@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/crayfishx/puppet-netapp_smo.svg?branch=feature%2Fversioned_installs)](https://travis-ci.org/crayfishx/puppet-netapp_smo)
+
 # netapp_smo
 
 
