@@ -1,0 +1,12 @@
+---
+fixtures:
+  forge_modules:
+    archive:
+      repo: puppet/archive
+    inifile:
+      repo: puppetlabs/inifile
+    systemd:
+      repo: camptocamp/systemd
+  symlinks:
+    netapp_smo: "#{source_dir}"
+

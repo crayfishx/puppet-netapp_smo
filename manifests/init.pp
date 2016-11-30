@@ -91,22 +91,22 @@ class netapp_smo (
         fail("Must specify a version number in order to use upgradable feature")
       }
 
-      file { "${smo_root}/.puppet":
+      file { "${smo_root}/smo/.puppet":
         ensure  => directory,
         require => Exec['smo::install'],
       }
 
-      file { "${smo_root}/.puppet/version-${version}":
+      file { "${smo_root}/smo/.puppet/version-${version}":
         ensure  => file,
         content => "This file is needed by Puppet, no not remove",
         require => Exec['smo::install'],
       }
-      $check_installed = "${smo_root}/.puppet/version-${version}"
+      $check_installed = "${smo_root}/smo/.puppet/version-${version}"
 
       # If we are managing upgradable versions and the target version does
       # not exist then we should stop the service, we must do this with an
       # exec
-      $stop_cmd = $::manage_systemd ? {
+      $stop_cmd = $manage_systemd ? {
         true    => "systemctl stop ${service_name}",
         default => "service ${service_name} stop"
       }

@@ -76,7 +76,7 @@ The location of the snapmanager binaries, defaults to `/opt/NetApp`, or `/opt/NT
 A hash of `netapp_smo::property` types to configure. (see below)
 
 `upgradable`: (optional, boolean)
-This feature can only be used when `manage_installer` is true and a `version` attribute is supplied.  It causes the module to attempt to keep track of installed versions in `${smo_root}/.puppet/`  allowing you to upgrade SMO by changing the version.  If upgradable is set to `true` and the target version does not exist in `.puppet/` then the module will stop the SMO service and attempt to download and run the installer.  By default, this feature is disabled.  A future major release of this module will enable this by default.
+This feature can only be used when `manage_installer` is true and a `version` attribute is supplied.  It causes the module to attempt to keep track of installed versions in `${smo_root}/smo/.puppet/`  allowing you to upgrade SMO by changing the version.  If upgradable is set to `true` and the target version does not exist in `.puppet/` then the module will stop the SMO service and attempt to download and run the installer.  By default, this feature is disabled.  A future major release of this module will enable this by default.
 
 ### Service
 
