@@ -1,3 +1,10 @@
+### 2.1.1
+
+* Fixed bug with service stopping and starting on every Puppet run with upgradable https://github.com/crayfishx/puppet-netapp_smo/pull/7
+* Fixed netapp-smo service not being enabled https://github.com/crayfishx/puppet-netapp_smo/pull/6
+* Fixed scoping of service_name attribute and other minor lint fixes
+
+
 ## 2.1.0
 
 Feature release.
