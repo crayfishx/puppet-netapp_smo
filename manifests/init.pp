@@ -113,7 +113,7 @@ class netapp_smo (
       exec { 'netapp_smo::service_stop':
         path    => '/sbin:/bin:/usr/sbin:/usr/bin',
         command => $stop_cmd,
-        creates => "${smo_root}/.puppet/version-${version}",
+        creates => "${smo_root}/smo/.puppet/version-${version}",
         before  => Exec['smo::install'],
       }
 
