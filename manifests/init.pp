@@ -165,6 +165,7 @@ class netapp_smo (
   if $manage_service {
     service { $service_name:
       ensure     => running,
+      enabled    => true,
       start      => $service_start,
       stop       => $service_stop,
       status     => $service_status,
