@@ -1,6 +1,6 @@
 {
   "name": "crayfishx-netapp_smo",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "author": "Craig Dunn",
   "summary": "Module to set up SnapManager for Oracle",
   "license": "Apache-2.0",
