@@ -109,7 +109,8 @@ describe 'netapp_smo' do
 
     it do
       is_expected.to contain_exec('netapp_smo::service_stop').with(
-        :command => 'systemctl stop netapp-smo'
+        :command => 'systemctl stop netapp-smo',
+        :creates => '/opt/NetApp/smo/.puppet/version-3.4.1',
       ).that_comes_before('Exec[smo::install]')
     end
 
